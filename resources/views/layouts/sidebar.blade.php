@@ -35,7 +35,7 @@
     </li>
 
     <!-- Dropdown Data Master -->
-    <li class="menu-item {{ request()->segment(1) == 'master' || request()->is('categories*', 'services*') ? 'active open' : '' }}">
+    <li class="menu-item {{ request()->segment(1) == 'master' || request()->is('categories*', 'services*','mechanics*','spareparts*') ? 'active open' : '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons ti ti-database"></i>
         <div>Data Master</div>
@@ -51,14 +51,14 @@
             <div>Jasa Servis</div>
           </a>
         </li>
-        <li class="menu-item {{ request()->segment(2) == 'sukucadang' ? 'active' : '' }}">
-          <a href="javascript:void(0);" class="menu-link">
-            <div>Stok & Suku Cadang</div>
+        <li class="menu-item {{ request()->is('spareparts*') ? 'active' : '' }}">
+          <a href="{{ route('spareparts.index') }}" class="menu-link">
+            <div>Sparepart</div>
           </a>
         </li>
-        <li class="menu-item {{ request()->segment(2) == 'mekanik' ? 'active' : '' }}">
-          <a href="javascript:void(0);" class="menu-link">
-            <div>Mekanik</div>
+        <li class="menu-item {{ request()->is('mechanics*') ? 'active' : '' }}">
+          <a href="{{ route('mechanics.index') }}" class="menu-link">
+            <div>Mechanics</div>
           </a>
         </li>
         <li class="menu-item {{ request()->segment(2) == 'pelanggan' ? 'active' : '' }}">

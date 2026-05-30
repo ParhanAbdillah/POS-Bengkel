@@ -3,12 +3,17 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('dashboard');
+    return redirect('/login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-})->name('dashboard');
+Route::get('/login', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
+Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard.index');
+    })->name('dashboard');
 
 // Category
 Route::get('/categories', [App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
@@ -26,11 +31,23 @@ Route::get('/services/{service}/edit', [App\Http\Controllers\ServicesController:
 Route::put('/services/{service}', [App\Http\Controllers\ServicesController::class, 'update'])->name('services.update');
 Route::delete('/services/{service}', [App\Http\Controllers\ServicesController::class, 'destroy'])->name('services.destroy');
 
+// Mechanics
+Route::get('/mechanics', [App\Http\Controllers\MechanicsController::class, 'index'])->name('mechanics.index');
+Route::post('/mechanics', [App\Http\Controllers\MechanicsController::class, 'store'])->name('mechanics.store');
+Route::get('/mechanics/create', [App\Http\Controllers\MechanicsController::class, 'create'])->name('mechanics.create');
+Route::get('/mechanics/{mechanic}/edit', [App\Http\Controllers\MechanicsController::class, 'edit'])->name('mechanics.edit');
+Route::put('/mechanics/{mechanic}', [App\Http\Controllers\MechanicsController::class, 'update'])->name('mechanics.update');
+Route::delete('/mechanics/{mechanic}', [App\Http\Controllers\MechanicsController::class, 'destroy'])->name('mechanics.destroy');
 
-Route::get('/profile', function () {
-    return "Halaman Profil";
-})->name('profile.edit');
+// Spareparts
+Route::get('/spareparts', [App\Http\Controllers\SparepartController::class, 'index'])->name('spareparts.index');
+Route::post('/spareparts', [App\Http\Controllers\SparepartController::class, 'store'])->name('spareparts.store');
+Route::get('/spareparts/create', [App\Http\Controllers\SparepartController::class, 'create'])->name('spareparts.create');
+Route::get('/spareparts/{sparepart}/edit', [App\Http\Controllers\SparepartController::class, 'edit'])->name('spareparts.edit');
+Route::put('/spareparts/{sparepart}', [App\Http\Controllers\SparepartController::class, 'update'])->name('spareparts.update');
+Route::delete('/spareparts/{sparepart}', [App\Http\Controllers\SparepartController::class, 'destroy'])->name('spareparts.destroy');
 
-Route::post('/logout', function () {
-    return redirect('/');
-})->name('logout');
+    Route::get('/profile', function () {
+        return "Halaman Profil";
+    })->name('profile.edit');
+});

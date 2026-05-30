@@ -114,4 +114,9 @@
     .badge.bg-primary {
         background-color: #0c8a8a !important;
     }
+
+    /* Table Headers */
+    .table th, table th {
+        text-transform: capitalize !important;
+    }
 </style>
