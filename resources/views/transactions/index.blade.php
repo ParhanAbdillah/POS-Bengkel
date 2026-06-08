@@ -1,32 +1,49 @@
 @extends('layouts.app')
-@section('title', 'Kategori')
+@section('title', 'Transaksi Servis')
 @section('content')
     <div class="card">
         <div class="card-datatable table-responsive pt-0">
-            <table class="table border-top" id="categoriesTable">
+            <table class="table border-top" id="transactionsTable">
                 <thead>
                     <tr>
                         <th style="width: 70px;">No</th>
-                        <th>Nama Kategori</th>
+                        <th>No. Invoice</th>
+                        <th>Tanggal</th>
+                        <th>Pelanggan</th>
+                        <th>Kendaraan</th>
+                        <th>Grand Total</th>
+                        <th>Status</th>
                         <th style="width: 150px; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($categories as $c)
+                    @foreach ($transactions as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td><span class="fw-semibold text-heading">{{ $c->name_category }}</span></td>
+                            <td><span class="fw-semibold text-heading">{{ $item->invoice_number }}</span></td>
+                            <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
+                            <td>{{ $item->vehicle->customer->name ?? '-' }}</td>
+                            <td>{{ $item->vehicle->plate_number ?? '-' }} - {{ $item->vehicle->model_name ?? '-' }}</td>
+                            <td>Rp {{ number_format($item->grand_total, 0, ',', '.') }}</td>
+                            <td>
+                                @if($item->status == 'antre')
+                                    <span class="badge bg-label-secondary">Antre</span>
+                                @elseif($item->status == 'proses')
+                                    <span class="badge bg-label-warning">Proses</span>
+                                @elseif($item->status == 'menunggu_sparepart')
+                                    <span class="badge bg-label-danger">Menunggu Sparepart</span>
+                                @elseif($item->status == 'bisa_diambil')
+                                    <span class="badge bg-label-info">Bisa Diambil</span>
+                                @elseif($item->status == 'selesai')
+                                    <span class="badge bg-label-success">Selesai</span>
+                                @else
+                                    <span class="badge bg-label-dark">Batal</span>
+                                @endif
+                            </td>
                             <td class="text-center">
-                                <a href="#" class="btn btn-sm btn-icon btn-label-primary btn-edit me-2" data-url="{{ route('categories.edit', $c->id) }}" title="Edit">
+                                <a href="{{ route('transactions.edit', $item->id) }}" class="btn btn-sm btn-icon btn-label-primary" title="Kelola Transaksi">
                                     <i class="ti ti-edit"></i>
                                 </a>
-                                <form action="{{ route('categories.destroy', $c->id) }}" method="POST" class="d-inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="btn btn-sm btn-icon btn-label-danger btn-delete" title="Hapus">
-                                        <i class="ti ti-trash"></i>
-                                    </button>
-                                </form>
                             </td>
                         </tr>
                     @endforeach
@@ -34,59 +51,37 @@
             </table>
         </div>
     </div>
-    {{-- MODAL TAMBAH & EDIT DATA --}}
-    <div class="modal fade" id="categorymodal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="titlemodal"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="loadForm">  
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 @push('myscript')
     <script>
-        $(function(){
-
+        $(function() {
             @if (session('success'))
                 Swal.fire({
                     title: 'Berhasil!',
                     text: "{{ session('success') }}",
                     icon: 'success',
-                    customClass: {
-                        confirmButton: 'btn btn-primary'
-                    },
+                    customClass: { confirmButton: 'btn btn-primary' },
                     buttonsStyling: false
                 });
             @endif
-
             @if (session('error'))
                 Swal.fire({
                     title: 'Gagal!',
                     text: "{{ session('error') }}",
                     icon: 'error',
-                    customClass: {
-                        confirmButton: 'btn btn-primary'
-                    },
+                    customClass: { confirmButton: 'btn btn-primary' },
                     buttonsStyling: false
                 });
             @endif
-
-            var dt = $('#categoriesTable').DataTable({
+            var dt = $('#transactionsTable').DataTable({
                 dom: '<"card-header flex-column flex-md-row p-3 d-flex justify-content-between align-items-center"<"head-label text-center"><"dt-action-buttons text-end pt-3 pt-md-0"B>><"row mx-2"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row mx-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
-                buttons: [
-                    {
-                        text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block">Tambah Kategori</span>',
-                        className: 'create-new btn btn-primary waves-effect waves-light',
-                        attr: {
-                            'id': 'btnAdd'
-                        }
+                buttons: [{
+                    text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block">Kendaraan Masuk</span>',
+                    className: 'create-new btn btn-primary waves-effect waves-light',
+                    action: function() {
+                        window.location.href = "{{ route('transactions.create') }}";
                     }
-                ],
+                }],
                 language: {
                     search: 'Cari:',
                     lengthMenu: 'Tampilkan _MENU_ data',
@@ -100,30 +95,13 @@
                     }
                 }
             });
-
-            $('div.head-label').html('<h5 class="card-title mb-0">Data Kategori</h5>');
-
-            $(document).on('click', '#btnAdd', function(e){
-                e.preventDefault();
-                $('#titlemodal').text('Tambah Kategori');
-                $('#loadForm').load("{{ route('categories.create') }}");
-                $('#categorymodal').modal('show');
-            });
-
-            $(document).on('click', '.btn-edit', function(e){
-                e.preventDefault();
-                var url = $(this).data('url');
-                $('#titlemodal').text('Edit Kategori');
-                $('#loadForm').load(url);
-                $('#categorymodal').modal('show');
-            });
-
-            $(document).on('click', '.btn-delete', function(e){
+            $('div.head-label').html('<h5 class="card-title mb-0">Daftar Transaksi Kasir</h5>');
+            $(document).on('click', '.btn-delete', function(e) {
                 e.preventDefault();
                 var form = $(this).closest('form');
                 Swal.fire({
                     title: 'Apakah Anda yakin?',
-                    text: "Data kategori yang dihapus tidak dapat dikembalikan!",
+                    text: "Data transaksi yang dihapus tidak dapat dikembalikan!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Ya, Hapus!',
@@ -139,6 +117,6 @@
                     }
                 });
             });
-        });
+        })
     </script>
 @endpush

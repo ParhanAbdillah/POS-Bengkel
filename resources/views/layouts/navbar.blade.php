@@ -6,7 +6,6 @@
         <i class="ti ti-menu-2 ti-sm"></i>
       </a>
     </div>
-
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
       <!-- Search -->
       <div class="navbar-nav align-items-center">
@@ -18,12 +17,9 @@
         </div>
       </div>
       <!-- /Search -->
-
       <ul class="navbar-nav flex-row align-items-center ms-auto">
-        
         </li>
         <!--/ Language -->
-
         <!-- Style Switcher -->
         <li class="nav-item me-2 me-xl-0">
           <a class="nav-link style-switcher-toggle hide-arrow" href="javascript:void(0);">
@@ -31,11 +27,8 @@
           </a>
         </li>
         <!--/ Style Switcher -->
-
         <!-- Quick links  -->
-        
         <!-- Quick links -->
-
         <!-- Notification -->
         <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
           <a
@@ -67,7 +60,7 @@
                   <div class="d-flex">
                     <div class="flex-shrink-0 me-3">
                       <div class="avatar">
-                        <img src="../../assets/img/avatars/1.png" alt class="h-auto rounded-circle" />
+                        <img src="{{ asset('assets/img/profil.png') }}" alt class="h-auto rounded-circle" />
                       </div>
                     </div>
                     <div class="flex-grow-1">
@@ -279,12 +272,11 @@
           </ul>
         </li>
         <!--/ Notification -->
-
         <!-- User -->
         <li class="nav-item navbar-dropdown dropdown-user dropdown">
           <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
             <div class="avatar avatar-online">
-              <img src="../../assets/img/avatars/1.png" alt class="h-auto rounded-circle" />
+              <img src="{{ asset('assets/img/profil.png') }}" alt class="h-auto rounded-circle" />
             </div>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
@@ -293,7 +285,7 @@
                 <div class="d-flex">
                   <div class="flex-shrink-0 me-3">
                     <div class="avatar avatar-online">
-                      <img src="../../assets/img/avatars/1.png" alt class="h-auto rounded-circle" />
+                      <img src="{{ asset('assets/img/profil.png') }}" alt class="h-auto rounded-circle" />
                     </div>
                   </div>
                   <div class="flex-grow-1">
@@ -364,7 +356,6 @@
         <!--/ User -->
       </ul>
     </div>
-
     <!-- Search Small Screens -->
     <div class="navbar-search-wrapper search-input-wrapper d-none">
       <input

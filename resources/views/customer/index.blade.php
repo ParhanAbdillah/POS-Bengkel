@@ -1,37 +1,31 @@
 @extends('layouts.app')
-@section('title', 'Mechanics')
+@section('title', 'Pelanggan')
 @section('content')
     <div class="card">
         <div class="card-datatable table-responsive pt-0">
-            <table class="table border-top" id="mechanicsTable">
+            <table class="table border-top" id="customersTable">
                 <thead>
                     <tr>
                         <th style="width: 70px;">No</th>
-                        <th>Nama Mechanics</th>
-                        <th>Telepon</th>
+                        <th>Nama Pelanggan</th>
+                        <th>No Telepon</th>
                         <th>Alamat</th>
-                        <th>Status</th>
                         <th style="width: 150px; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($mechanics as $item)
+                    @foreach ($customers as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td><span class="fw-semibold text-heading">{{ $item->name_mechanic }}</span></td>
-                            <td>{{ $item->phone_mechanic }}</td>
-                            <td>{{ $item->address_mechanic }}</td>
-                            <td>
-                                <span class="badge bg-label-{{ $item->status_mechanic === 'aktif' ? 'success' : 'secondary' }}">
-                                    {{ ucfirst($item->status_mechanic) }}
-                                </span>
-                            </td>
+                            <td><span class="fw-semibold text-heading">{{ $item->name }}</span></td>
+                            <td>{{ $item->phone ?? '-' }}</td>
+                            <td>{{ $item->address ?? '-' }}</td>
                             <td class="text-center">
                                 <a href="#" class="btn btn-sm btn-icon btn-label-primary btn-edit me-2"
-                                    data-url="{{ route('mechanics.edit', $item->id) }}" title="Edit">
+                                    data-url="{{ route('customers.edit', $item->id) }}" title="Edit">
                                     <i class="ti ti-edit"></i>
                                 </a>
-                                <form action="{{ route('mechanics.destroy', $item->id) }}" method="POST"
+                                <form action="{{ route('customers.destroy', $item->id) }}" method="POST"
                                     class="d-inline-block">
                                     @csrf
                                     @method('DELETE')
@@ -48,7 +42,7 @@
         </div>
     </div>
     {{-- MODAL TAMBAH & EDIT DATA --}}
-    <div class="modal fade" id="mechanicsmodal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="customermodal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -90,10 +84,10 @@
                     });
                 @endif
 
-                var dt = $('#mechanicsTable').DataTable({
+                var dt = $('#customersTable').DataTable({
                     dom: '<"card-header flex-column flex-md-row p-3 d-flex justify-content-between align-items-center"<"head-label text-center"><"dt-action-buttons text-end pt-3 pt-md-0"B>><"row mx-2"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row mx-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
                     buttons: [{
-                        text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block">Tambah Mechanics</span>',
+                        text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block">Tambah Pelanggan</span>',
                         className: 'create-new btn btn-primary waves-effect waves-light',
                         attr: {
                             'id': 'btnAdd'
@@ -113,20 +107,20 @@
                     }
                 });
 
-                $('div.head-label').html('<h5 class="card-title mb-0">Data Mechanics</h5>');
+                $('div.head-label').html('<h5 class="card-title mb-0">Data Pelanggan</h5>');
                 $(document).on('click', '#btnAdd', function(e) {
                     e.preventDefault();
-                    $('#titlemodal').text('Tambah Mechanics');
-                    $('#loadForm').load("{{ route('mechanics.create') }}");
-                    $('#mechanicsmodal').modal('show');
+                    $('#titlemodal').text('Tambah Pelanggan');
+                    $('#loadForm').load("{{ route('customers.create') }}");
+                    $('#customermodal').modal('show');
                 });
 
                 $(document).on('click', '.btn-edit', function(e) {
                     e.preventDefault();
                     var url = $(this).data('url');
-                    $('#titlemodal').text('Edit Mechanics');
+                    $('#titlemodal').text('Edit Pelanggan');
                     $('#loadForm').load(url);
-                    $('#mechanicsmodal').modal('show');
+                    $('#customermodal').modal('show');
                 });
 
                 $(document).on('click', '.btn-delete', function(e) {
@@ -134,7 +128,7 @@
                     var form = $(this).closest('form');
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        text: "Data mekanik yang dihapus tidak dapat dikembalikan!",
+                        text: "Data pelanggan yang dihapus tidak dapat dikembalikan!",
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Ya, Hapus!',

@@ -49,7 +49,6 @@
             </table>
         </div>
     </div>
-
     {{-- MODAL TAMBAH & EDIT DATA --}}
     <div class="modal fade" id="sparepartmodal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -59,7 +58,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="loadForm">
-                    <!-- Modal body content goes here -->
                 </div>
             </div>
         </div>
@@ -69,7 +67,7 @@
     <script>
         $(function() {
             $(function() {
-                // Trigger SweetAlert2 popup if success message exists in Laravel Session
+
                 @if (session('success'))
                     Swal.fire({
                         title: 'Berhasil!',
@@ -82,7 +80,6 @@
                     });
                 @endif
 
-                // Trigger SweetAlert2 popup if error message exists in Laravel Session
                 @if (session('error'))
                     Swal.fire({
                         title: 'Gagal!',
@@ -94,7 +91,7 @@
                         buttonsStyling: false
                     });
                 @endif
-                // Initialize DataTable
+
                 var dt = $('#sparepartsTable').DataTable({
                     dom: '<"card-header flex-column flex-md-row p-3 d-flex justify-content-between align-items-center"<"head-label text-center"><"dt-action-buttons text-end pt-3 pt-md-0"B>><"row mx-2"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row mx-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
                     buttons: [{
@@ -118,9 +115,7 @@
                     }
                 });
 
-                // Set header label title
                 $('div.head-label').html('<h5 class="card-title mb-0">Data Sparepart</h5>');
-
                 $(document).on('click', '#btnAdd', function(e) {
                     e.preventDefault();
                     $('#titlemodal').text('Tambah Sparepart');
@@ -128,7 +123,6 @@
                     $('#sparepartmodal').modal('show');
                 });
 
-                // Handle Edit Button 
                 $(document).on('click', '.btn-edit', function(e) {
                     e.preventDefault();
                     var url = $(this).data('url');
@@ -137,11 +131,9 @@
                     $('#sparepartmodal').modal('show');
                 });
 
-                // Handle Delete 
                 $(document).on('click', '.btn-delete', function(e) {
                     e.preventDefault();
                     var form = $(this).closest('form');
-
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
                         text: "Data sparepart yang dihapus tidak dapat dikembalikan!",
@@ -161,7 +153,6 @@
                     });
                 });
             })
-
         })
     </script>
 @endpush

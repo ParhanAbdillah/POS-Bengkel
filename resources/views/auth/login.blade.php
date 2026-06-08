@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Login - POS Bengkel</title>
+    <title>Login - Mandiri Motor</title>
     @include('layouts.style')
     <style>
         body {
@@ -13,8 +13,9 @@
             min-height: 100vh;
         }
         .login-side-image {
-            background-image: url('{{ asset("assets/img/foto.jpg") }}');
-            background-size: cover;
+            background-image: url('{{ asset("assets/img/logo.jpeg") }}');
+            background-size: contain;
+            background-color: #000;
             background-position: center;
             background-repeat: no-repeat;
             position: relative;
@@ -26,7 +27,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(180deg, rgba(12, 138, 138, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%);
+            background: rgba(0, 0, 0, 0.3);
             z-index: 1;
         }
         .login-side-content {
@@ -86,24 +87,21 @@
 </head>
 <body>
     <div class="row g-0 login-wrapper">
-        <!-- Left Side Image -->
+
         <div class="col-lg-7 d-none d-lg-block login-side-image">
             <div class="login-side-content">
-                <h1 class="display-4 fw-bolder mb-3 text-white">POS Bengkel</h1>
+                <h1 class="display-4 fw-bolder mb-3 text-white">Mandiri Motor</h1>
                 <p class="lead fw-normal text-white-50">Kelola inventaris, layanan, dan penjualan bengkel Anda dengan lebih mudah, efisien, dan profesional.</p>
             </div>
         </div>
-        
-        <!-- Right Side Form -->
+
         <div class="col-12 col-lg-5 login-right-side p-4 p-lg-0">
             <div class="login-form-container">
                 <div class="brand-logo">
-                    <i class="ti ti-tool text-primary fs-2"></i> POS Bengkel
+                    <i class="ti ti-tool text-primary fs-2"></i> Mandiri Motor
                 </div>
-                
                 <h4 class="fw-bold mb-1">Selamat Datang 👋</h4>
                 <p class="text-muted mb-4">Silakan masuk ke akun Anda untuk memulai.</p>
-
                 @if ($errors->any())
                     <div class="alert alert-danger alert-dismissible fade show rounded-3" role="alert">
                         <ul class="mb-0 ps-3">
@@ -114,47 +112,46 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-
                 <form id="formAuthentication" action="{{ route('login') }}" method="POST">
                     @csrf
                     <div class="mb-4">
                         <label for="email" class="form-label fw-semibold">Email Address</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0"><i class="ti ti-mail"></i></span>
-                            <input type="email" class="form-control border-start-0 ps-0" id="email" name="email" value="{{ old('email') }}" placeholder="admin@gmail.com" autofocus required />
+                            <span class="input-group-text bg-light border-end-0 @error('email') border-danger @enderror"><i class="ti ti-mail @error('email') text-danger @enderror"></i></span>
+                            <input type="email" class="form-control border-start-0 ps-0 @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="example@gmail.com" autofocus />
                         </div>
+                        @error('email')
+                            <div class="text-danger mt-1 small">{{ $message }}</div>
+                        @enderror
                     </div>
-                    
                     <div class="mb-4 form-password-toggle">
                         <label class="form-label fw-semibold" for="password">Password</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0"><i class="ti ti-lock"></i></span>
-                            <input type="password" id="password" class="form-control border-start-0 border-end-0 ps-0" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
-                            <span class="input-group-text cursor-pointer bg-transparent"><i class="ti ti-eye-off"></i></span>
+                            <span class="input-group-text bg-light border-end-0 @error('password') border-danger @enderror"><i class="ti ti-lock @error('password') text-danger @enderror"></i></span>
+                            <input type="password" id="password" class="form-control border-start-0 border-end-0 ps-0 @error('password') is-invalid @enderror" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                            <span class="input-group-text cursor-pointer bg-transparent @error('password') border-danger @enderror"><i class="ti ti-eye-off"></i></span>
                         </div>
+                        @error('password')
+                            <div class="text-danger mt-1 small">{{ $message }}</div>
+                        @enderror
                     </div>
-                    
                     <div class="mb-4 d-flex justify-content-between align-items-center">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="remember" name="remember" />
                             <label class="form-check-label text-muted" for="remember"> Ingat Saya </label>
                         </div>
                     </div>
-                    
                     <button class="btn btn-primary d-grid w-100 mb-3" type="submit">Log in</button>
                 </form>
             </div>
         </div>
     </div>
-    
     @include('layouts.script')
-    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const passwordInput = document.getElementById('password');
             const toggleIcon = document.querySelector('.form-password-toggle .cursor-pointer');
             const icon = toggleIcon.querySelector('i');
-
             toggleIcon.addEventListener('click', function() {
                 if (passwordInput.type === 'password') {
                     passwordInput.type = 'text';
